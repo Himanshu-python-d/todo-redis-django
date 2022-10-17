@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+    django:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - "./todoproejct:/todo"
+        depends_on:
+            - postgres
+        ports:
+            - "8000:80"
+
+    postgres:
+        image: postgres:14.3-alpine
+        environment:
+            - POSTGRES_DB=tododb
+            - POSTGRES_USER=todouser
+            - POSTGRES_PASSWORD=developer
+        
