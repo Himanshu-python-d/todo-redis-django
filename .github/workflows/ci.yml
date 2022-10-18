@@ -27,7 +27,7 @@ jobs:
           pip install -r requirements.txt          
       - name: Black and isort
         run: |
-          black syncMe_convertor/*.py tests/*.py --check
-          isort syncMe_convertor/*.py tests/*.py -c -v
+          black .
+          isort .
       - name: Pytest 
         run: pytest
