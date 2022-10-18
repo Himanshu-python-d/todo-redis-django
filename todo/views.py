@@ -1,13 +1,14 @@
-from django.shortcuts import render
-from rest_framework.response import Response
-from .tasks import get, remove, add, update
-from .cache_function import getAllKey, getKey
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 # Create your views here.
 from django.http import HttpResponse
-from rest_framework import viewsets, status
+from django.shortcuts import render
+from rest_framework import status, viewsets
+from rest_framework.response import Response
+
+from .cache_function import getAllKey, getKey
+from .tasks import add, get, remove, update
 
 
 class TodoViewSet(viewsets.ViewSet):
