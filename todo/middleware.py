@@ -1,5 +1,6 @@
 import django_rq
-from .cache_function import getKey, incrKey, addKey, setKey, deleteKey, getAllKey
+
+from .cache_function import addKey, deleteKey, getAllKey, getKey, incrKey, setKey
 from .pubsub import publish_data_on_redis
 
 
