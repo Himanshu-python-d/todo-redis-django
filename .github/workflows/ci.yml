@@ -29,5 +29,5 @@ jobs:
         run: |
           black .
           isort .
-      - name: Pytest 
-        run: pytest
+      - name: Test 
+        run: python3 manage.py test
