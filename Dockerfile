@@ -14,4 +14,5 @@ RUN apt-get update && apt-get install -y \
     musl-dev
 
 # Install dependencies from requirements file
+COPY requirements.txt .
 RUN pip install -r requirements.txt

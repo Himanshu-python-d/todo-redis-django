@@ -14,5 +14,6 @@ urlpatterns = [
     ),
     path("todoAllCache/<str:key>", TodoViewSet.as_view({"get": "getCache"})),
     path("getKey/<str:key>", TodoViewSet.as_view({"get": "getKey"})),
-    path("todo/<str:pk>", TodoViewSet.as_view({"put": "update", "delete": "remove"})),
+    path("todo/<str:pk>",
+         TodoViewSet.as_view({"put": "update", "delete": "remove"})),
 ]

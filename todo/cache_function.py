@@ -1,6 +1,8 @@
 from django.core.cache import cache
 
 # This function increase value by one
+
+
 def incrKey(key, value, timeout=None):
     return cache.incr(key, delta=value)
 
