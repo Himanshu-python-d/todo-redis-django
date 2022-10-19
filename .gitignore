@@ -13,3 +13,7 @@ TEST-*.xml
 *.log
 htmlcov/
 .vscode/
+
+**/__pycache__/
+
+.DS_Store

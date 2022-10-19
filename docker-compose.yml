@@ -1,21 +1,53 @@
-version: '2'
-
+version: '3'
 services:
-    django:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        volumes:
-            - "./todoproejct:/todo"
-        depends_on:
-            - postgres
-        ports:
-            - "8000:80"
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/todo
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      - db
 
-    postgres:
-        image: postgres:14.3-alpine
-        environment:
-            - POSTGRES_DB=tododb
-            - POSTGRES_USER=todouser
-            - POSTGRES_PASSWORD=developer
-        
+  db:
+    image: postgres:14.3-alpine
+    container_name: db
+    restart: always
+    environment:
+      - POSTGRES_DB=postgress
+      - POSTGRES_USER=postgress
+      - POSTGRES_PASSWORD=postgress
+      - RQ_REDIS_HOST=redis
+      - RQ_REDIS_PORT=6379
+      - RQ_REDIS_DB=0
+      - POSTGRES_HOST_AUTH_METHOD=trust
+  rq:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    command: python manage.py rqworker default
+    volumes:
+      - .:/django-rq
+    depends_on:
+      - redis
+
+  rq-scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.scheduler
+    command: python manage.py rqscheduler default
+    volumes:
+      - .:/django-rq
+    depends_on:
+      - redis
+      - rq
+
+  redis:
+    image: "redis:alpine"
+
+volumes:
+  logs:
+

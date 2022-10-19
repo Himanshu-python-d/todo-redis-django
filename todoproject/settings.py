@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -80,11 +81,11 @@ WSGI_APPLICATION = "todoproject.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "tododb",
-        "USER": "todouser",
-        "PASSWORD": "developer",
-        "HOST": "postgres",
-        "PORT": 5432,
+        "NAME": os.environ.get("DATABASE_NAME"),
+        "USER": os.environ.get("DATABASE_USER"),
+        "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
+        "HOST": os.environ.get("DB_HOST"),
+        "PORT": os.environ.get("DATABASE_PORT"),
     }
 }
 
@@ -145,8 +146,8 @@ SESSION_CACHE_ALIAS = "default"
 
 RQ_QUEUES = {
     "default": {
-        "HOST": "localhost",
-        "PORT": 6379,
-        "DB": 0,
+        "HOST": os.environ.get("RQ_REDIS_HOST"),
+        "PORT": os.environ.get("RQ_REDIS_PORT"),
+        "DB": os.environ.get("RQ_REDIS_DB"),
     }
 }
