@@ -84,7 +84,7 @@ DATABASES = {
         "NAME": os.environ.get("DATABASE_NAME"),
         "USER": os.environ.get("DATABASE_USER"),
         "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
-        "HOST": os.environ.get("DB_HOST"),
+        "HOST": os.getenv('DATABASE_HOST', 'localhost'),
         "PORT": os.environ.get("DATABASE_PORT"),
     }
 }
@@ -131,16 +131,29 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CACHE_TTL = 60 * 1500
+REDIS_HOST = os.environ.get('RQ_REDIS_HOST', '127.0.0.1')
+REDIS_PORT = os.environ.get('RQ_REDIS_PORT', '6379')
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
-        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-        "KEY_PREFIX": "example",
-    }
+        "LOCATION": "redis://{}:{}/1".format(REDIS_HOST, REDIS_PORT),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    #...
 }
+# CACHE_TTL = 60 * 1500
+
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379/1",
+#         "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+#         "KEY_PREFIX": "example",
+#     }
+# }
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 

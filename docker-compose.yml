@@ -1,36 +1,39 @@
 version: '3'
 services:
+  db:
+    image: 'postgres:latest'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - '5432'
+    env_file:
+      - .env.dev
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      
   django:
     build:
       context: .
       dockerfile: Dockerfile.local
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/todo
     ports:
       - "127.0.0.1:8000:8000"
+    env_file:
+      - .env.dev
     depends_on:
       - db
 
-  db:
-    image: postgres:14.3-alpine
-    container_name: db
-    restart: always
-    environment:
-      - POSTGRES_DB=postgress
-      - POSTGRES_USER=postgress
-      - POSTGRES_PASSWORD=postgress
-      - RQ_REDIS_HOST=redis
-      - RQ_REDIS_PORT=6379
-      - RQ_REDIS_DB=0
-      - POSTGRES_HOST_AUTH_METHOD=trust
   rq:
     build:
       context: .
       dockerfile: Dockerfile.local
-    command: python manage.py rqworker default
+    command: python3 manage.py rqworker default
     volumes:
       - .:/django-rq
+    env_file:
+      - .env.dev
     depends_on:
       - redis
 
@@ -38,16 +41,20 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.scheduler
-    command: python manage.py rqscheduler default
+    command: python3 manage.py rqscheduler default
     volumes:
       - .:/django-rq
+    env_file:
+      - .env.dev
     depends_on:
       - redis
       - rq
 
   redis:
     image: "redis:alpine"
+    command: redis-server
+    ports:
+      - "14000:6379"
 
 volumes:
-  logs:
-
+  postgres_data:

@@ -1,19 +1,11 @@
-# Development Dockerfile for Django todo
+# Development Dockerfile for Django app
 
 FROM python:3.8-slim
 
-# Set the default directory where CMD will execute
-WORKDIR /todo
-
-# Run Django's runserver by default
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    musl-dev
-
-# Install dependencies from requirements file
-COPY requirements.txt .
+ENV PYTHONUNBUFFERED 1
+RUN mkdir /code
+WORKDIR /code
+ADD requirements.txt /code/
 RUN pip install -r requirements.txt
+ADD . /code/
 CMD python3 manage.py rqworker default
