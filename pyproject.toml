@@ -1,7 +1,7 @@
 [tool.black]
 line-length = 88
 target-version = ['py39']
-exclude = [".gitignore", ".env.local", ".env.dev", ""]
+exclude = [".gitignore", ".env.local", ".env.dev", "pg_hba.conf", "postgresql.conf"]
 
 [tool.isort]
 profile = "black"
