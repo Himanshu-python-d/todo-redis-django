@@ -131,36 +131,15 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-REDIS_HOST = os.environ.get('RQ_REDIS_HOST', '127.0.0.1')
-REDIS_PORT = os.environ.get('RQ_REDIS_PORT', '6379')
-
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://{}:{}/1".format(REDIS_HOST, REDIS_PORT),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    },
-    #...
-}
-# CACHE_TTL = 60 * 1500
-
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://127.0.0.1:6379/1",
-#         "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-#         "KEY_PREFIX": "example",
-#     }
-# }
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
 RQ_QUEUES = {
-    "default": {
-        "HOST": os.environ.get("RQ_REDIS_HOST"),
-        "PORT": os.environ.get("RQ_REDIS_PORT"),
-        "DB": os.environ.get("RQ_REDIS_DB"),
+    'default': {
+        'URL': f"redis://{os.environ['RQ_REDIS_HOST']}:{os.environ['RQ_REDIS_PORT']}/{os.environ['RQ_REDIS_DB']}?socket_connect_timeout=10",
+        'DEFAULT_TIMEOUT': 360,  # that's a job timeout not socket timeout
     }
 }
+
+# django  rq-scheduler
+RQ_SHOW_ADMIN_LINK = True
